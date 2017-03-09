@@ -16,23 +16,23 @@ or from reproducing this project.
 
 Commands and Adresses for arduino
 Commands
-0   -   Status
-1   -   Relay on
-2   -   Relay off
-3   -   Set proportional valve
+| 0	|	Status 			|
+| 1	|	Relay on 		|
+| 2	|	Relay off 		|
+| 3	|	Set proportional valve 	|
 
 Addresses
-0   -   All
-1   -   Drum Temperature
-2   -   Chamber Temperature
-3   -   Exhausr Temperature
-4   -   Flame Status
-5   -   Drum Relay
-6   -   Cooling Relay
-7   -   Exhaust Relay
-8   -   Gas Relay
-9   -   Ignitor
-10  -   Proportional Valve
+| 0	|	All 			|
+| 1	|	Drum Temperature 	|
+| 2	|	Chamber Temperature 	|
+| 3	|	Exhaust Temperature	|
+| 4	|	Flame Status		|
+| 5	|	Drum Relay		|
+| 6	|	Cooling Relay		|
+| 7	|	Exhaust Relay		|
+| 8	|	Gas Relay		|
+| 9	|	Ignitor			|
+| 10	|	Proportional Valve	|
 
 Required Libraries
 - JavaFX Medusa
