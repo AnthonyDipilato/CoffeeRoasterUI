@@ -1,0 +1,177 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Feb 24, 2017, 2:54:25 PM
+    Author     : anthonydipilato
+*/
+
+.slider{
+    -fx-pref-width:         750;
+    -fx-show-tick-labels:   true;
+    -fx-show-tick-marks:    true;
+    -fx-major-tick-unit:    25;
+    -fx-minor-tick-count:   5;	 
+    -fx-show-tick-labels:   true;	 
+    -fx-block-increment:    1;
+}
+
+.slider .track {
+    -fx-pref-height:5;
+    -fx-background-color: #0d4d73;
+}
+
+.slider:vertical .track {
+    -fx-pref-width:5;
+}
+
+.slider .thumb {
+    -fx-pref-height: 40;
+    -fx-pref-width: 40;
+    -fx-background-color: #60676b;
+    -fx-border-radius: 10;
+    -fx-border-color: #212324;
+}
+
+.slider .thumb:pressed {
+    -fx-background-color: #303334;
+}
+
+.slider .axis .axis-tick-mark, .slider .axis .axis-minor-tick-mark, .slider .axis-tick-labels{
+    -fx-fill: null;
+    -fx-stroke: #999999;
+}
+
+.tBtn {
+    -fx-pref-width: 150px;
+    -fx-background-color: #565b5e;
+    -fx-background-radius: 5,4,3,5;
+    -fx-background-insets: 0,1,2,0;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+    -fx-font-family: "Arial";
+    -fx-text-fill: linear-gradient(white, #d0d0d0);
+    -fx-font-size: 14px;
+    -fx-padding: 10 20 10 20;
+}
+
+.tBtn:selected {
+    -fx-background-color: #303334;
+    -fx-text-fill: #999999;
+}
+
+.tBtn:pressed{
+    -fx-background-color: #303334;
+    -fx-text-fill: #999999;
+}
+
+.setBtn {
+    -fx-background-color: #565b5e;
+    -fx-background-radius: 5,4,3,5;
+    -fx-background-insets: 0,1,2,0;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+    -fx-font-family: "Arial";
+    -fx-text-fill: linear-gradient(white, #d0d0d0);
+    -fx-font-size: 14px;
+    -fx-padding: 10 20 10 20;
+}
+
+.setBtn:pressed{
+    -fx-background-color: #303334;
+    -fx-text-fill: #999999;
+}
+
+.chart {
+    -fx-padding: 10px;
+}
+.chart-content {
+    -fx-padding: 30px;
+}
+.chart-legend {
+   -fx-padding: 20px;
+   -fx-background-color:  #565b5e;
+}
+ 
+.chart-legend-item-symbol{
+}
+ 
+.chart-legend-item{
+    -fx-text-fill: white;
+}
+
+.chart-title {
+  -fx-text-fill: #c7c7c7;
+}
+ 
+.axis-label {
+  -fx-text-fill: #c7c7c7;
+}
+
+.chart-plot-background {
+    -fx-background-color: #3b3e3f;
+}
+.chart-vertical-grid-lines {
+    -fx-stroke: #222425;
+}
+.chart-horizontal-grid-lines {
+    -fx-stroke: #222425;
+}
+.chart-alternative-row-fill {
+    -fx-fill: #4e5254;
+    -fx-stroke: transparent;
+    -fx-stroke-width: 0;
+}
+
+.default-color0.chart-series-line { -fx-stroke: #44939e; }
+.default-color1.chart-series-line { -fx-stroke: #ffb74d; }
+.default-color2.chart-series-line { -fx-stroke: #e57373; }
+ 
+.default-color0.chart-line-symbol { -fx-background-color: #44939e, black; }
+.default-color1.chart-line-symbol { -fx-background-color: #ffb74d, black; }
+.default-color2.chart-line-symbol { -fx-background-color: #e57373, black; }
+
+.slider-label {
+  -fx-text-fill: #c7c7c7;
+}
+
+
+.clock {
+    -fx-font-size: 36;
+    -fx-text-fill: #c7c7c7;
+    -fx-font-family: "Liquid Crystal";
+}
+.proValve {
+    -fx-font-size: 30;
+    -fx-text-fill: #c7c7c7;
+    -fx-font-family: "Liquid Crystal";
+    -fx-pref-width: 124px;
+    -fx-background-color: transparent;
+    -fx-background-insets: 0,1,2,0;
+    -fx-padding: 0 10 10 20;
+    -fx-font-weight: bold;
+}
+
+.flameLabel {
+    -fx-text-fill: #c7c7c7;
+}
+
+.flameOn {
+    
+}
+
+.flameOff {
+    -fx-pref-width: 150px;
+    -fx-background-color: #565b5e;
+    -fx-background-radius: 5,4,3,5;
+    -fx-background-insets: 0,1,2,0;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+    -fx-font-family: "Arial";
+    -fx-text-fill: linear-gradient(white, #d0d0d0);
+    -fx-font-size: 16px;
+    -fx-padding: 10 20 10 20;
+    -fx-text-fill: #e57373;
+    -fx-font-weight: bold;
+}

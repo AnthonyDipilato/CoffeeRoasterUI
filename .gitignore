@@ -1,7 +1,6 @@
 .DS_STORE
 build
 nbproject
-src
 bin
 *~
 .classpath
