@@ -16,16 +16,16 @@ or from reproducing this project.
 
 Commands and Adresses for arduino
 Commands
-| | |
-|---|---| 
+| Code | Item |
+| --- | --- | 
 | 0	|	Status 			|
 | 1	|	Relay on 		|
 | 2	|	Relay off 		|
 | 3	|	Set proportional valve 	|
 
 Addresses
-| | |
-|---|---|
+| Address | Item |
+| --- | --- |
 | 0	|	All 			|
 | 1	|	Drum Temperature 	|
 | 2	|	Chamber Temperature 	|
