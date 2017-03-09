@@ -1,0 +1,15 @@
+.DS_STORE
+build
+nbproject
+src
+bin
+*~
+.classpath
+.project
+target
+.settings
+build.xml
+test
+manifest.mf
+dist
+
