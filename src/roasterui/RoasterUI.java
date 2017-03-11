@@ -109,12 +109,20 @@ public class RoasterUI extends Application {
     private         long timerResumed = 0;
     private         boolean timerStatus;
     private         long lastLog = 0;
+    // Control Buttons
+    private         ToggleButton ignitorBtn;
+    private         ToggleButton gasBtn;
+    private         ToggleButton drumBtn;
+    private         ToggleButton exhaustBtn;
+    private         ToggleButton coolingBtn;
+    private         Button flameBtn;
     // Status Variables
     private         boolean ignitorStatus = false;
     private         boolean gasStatus = false;
     private         boolean exhaustStatus = false;
     private         boolean coolingStatus = false;
     private         boolean drumStatus = false;
+    private         boolean flameStatus = false;
     private         int     proValve = 0;
     // Temperature Variables
     private         int drumTemp = 0;
@@ -147,6 +155,7 @@ public class RoasterUI extends Application {
         VBox sliderBox = addSliderBox();
         // Log Button Box
         VBox logBtnBox = logBtnBox();
+
         
         // Setup Chart
         xAxis = new CategoryAxis();
@@ -267,6 +276,7 @@ public class RoasterUI extends Application {
         Button dumpBtn = new Button("Dump");
         Button saveBtn = new Button("Save Log");
         Button resetBtn = new Button("Reset");
+        Button quitBtn = new Button("Exit");
         // CSS Styles for buttons
         clockDisplay.getStyleClass().add("clock");
         logBtn.getStyleClass().add("tBtn");
@@ -275,6 +285,7 @@ public class RoasterUI extends Application {
         dumpBtn.getStyleClass().add("tBtn");
         saveBtn.getStyleClass().add("tBtn");
         resetBtn.getStyleClass().add("tBtn");
+        quitBtn.getStyleClass().add("tBtn");
         
         // Listeners for buttons
         logBtn.setOnAction(new EventHandler<ActionEvent>() {
@@ -300,6 +311,13 @@ public class RoasterUI extends Application {
             }
         });
         
+        quitBtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                stop();
+            }
+        });
+        
         // Add buttons to vbox
         vbox.getChildren().add(clockDisplay);
         vbox.getChildren().add(logBtn);
@@ -308,6 +326,7 @@ public class RoasterUI extends Application {
         vbox.getChildren().add(secondBtn);
         vbox.getChildren().add(dumpBtn);
         vbox.getChildren().add(saveBtn);
+        vbox.getChildren().add(quitBtn);
         
         
         return vbox;
@@ -322,14 +341,14 @@ public class RoasterUI extends Application {
         vbox.setSpacing(20);
         
         // Initialize toggle Buttons
-        ToggleButton ignitorBtn = new ToggleButton("Ignitor");
-        ToggleButton gasBtn = new ToggleButton("Gas Valve");
-        ToggleButton drumBtn = new ToggleButton("Drum");
-        ToggleButton exhaustBtn = new ToggleButton("Exhaust Fan");
-        ToggleButton coolingBtn = new ToggleButton("Cooling Fan");
+        ignitorBtn = new ToggleButton("Ignitor");
+        gasBtn = new ToggleButton("Gas Valve");
+        drumBtn = new ToggleButton("Drum");
+        exhaustBtn = new ToggleButton("Exhaust Fan");
+        coolingBtn = new ToggleButton("Cooling Fan");
         //  Flame Status
         Label flameLabel = new Label("Flame Status");
-        Button flameOff = new Button("OFF");
+        flameBtn = new Button("OFF");
         // Add CSS styles
         ignitorBtn.getStyleClass().add("tBtn");
         gasBtn.getStyleClass().add("tBtn");
@@ -337,7 +356,7 @@ public class RoasterUI extends Application {
         exhaustBtn.getStyleClass().add("tBtn");
         coolingBtn.getStyleClass().add("tBtn");
         flameLabel.getStyleClass().add("flameLabel");
-        flameOff.getStyleClass().add("flameOff");
+        flameBtn.getStyleClass().add("flameOff");
         //Button Actions
         ignitorBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -377,7 +396,7 @@ public class RoasterUI extends Application {
         vbox.getChildren().add(exhaustBtn);
         vbox.getChildren().add(coolingBtn);
         vbox.getChildren().add(flameLabel);
-        vbox.getChildren().add(flameOff);
+        vbox.getChildren().add(flameBtn);
 
         return vbox;
     }
@@ -443,7 +462,7 @@ public class RoasterUI extends Application {
         
         stage.setTitle("Coffee Roaster v3.0");
         stage.setScene(scene);
-        stage.setFullScreen(false);
+        stage.setFullScreen(true);
         stage.show();
 
         // Timer display loop
@@ -481,30 +500,101 @@ public class RoasterUI extends Application {
         if (command != 0){
             System.out.println("Command: "+response);
             return;
-        }else{
-            if (4 < address && address <= 10){
-                System.out.println("Command: "+response);
-            }
-            value = Integer.parseInt(parts[2]);
         }
         // response commands should always be 0
+        value = Integer.parseInt(parts[2]);
         
         switch (address) {
             case 1:
                 drumTemp = value;
                 drum.setValue(drumTemp);
+                break;
             case 2:
                 chamberTemp = value;
                 chamber.setValue(chamberTemp);
+                break;
             case 3:
                 exhaustTemp = value;
                 exhaust.setValue(exhaustTemp);
+                break;
+            case 4:
+                if(flameStatus && value == 0){
+                    flameStatus = false;
+                    flameBtn.setText("OFF");
+                    flameBtn.getStyleClass().removeAll("flameOn");
+                    flameBtn.getStyleClass().add("flameOff");
+                }
+                if(!flameStatus && value == 1){
+                    flameStatus = true;
+                    flameBtn.setText("ON");
+                    flameBtn.getStyleClass().removeAll("flameOff");
+                    flameBtn.getStyleClass().add("flameOn");
+                }
+                break;
+            case 5:
+                if(drumStatus && value == 0){
+                    drumStatus = false;
+                    drumBtn.setSelected(false);
+                }
+                if(!drumStatus && value == 1){
+                    drumStatus = true;
+                    drumBtn.setSelected(true);
+                }
+                break;
+            case 6:
+                if(coolingStatus && value == 0){
+                    coolingStatus = false;
+                    coolingBtn.setSelected(false);
+                }
+                if(!coolingStatus && value == 1){
+                    coolingStatus = true;
+                    coolingBtn.setSelected(true);
+                }
+                break;
+            case 7:
+                if(exhaustStatus && value == 0){
+                    exhaustStatus = false;
+                    exhaustBtn.setSelected(false);
+                }
+                if(!exhaustStatus && value == 1){
+                    exhaustStatus = true;
+                    exhaustBtn.setSelected(true);
+                }
+                break;
+            case 8:
+                if(gasStatus && value == 0){
+                    gasStatus = false;
+                    gasBtn.setSelected(false);
+                }
+                if(!gasStatus && value == 1){
+                    gasStatus = true;
+                    gasBtn.setSelected(true);
+                }
+                break;
+            case 9:
+                System.out.println("Ignitor: "+value);
+                System.out.println("Ignitor Current: "+ignitorStatus);
+                if(ignitorStatus && value == 0){
+                    ignitorStatus = false;
+                    ignitorBtn.setSelected(false);
+                }
+                if(!ignitorStatus && value == 1){
+                    ignitorStatus = true;
+                    ignitorBtn.setSelected(true);
+                }
+                break;
+            case 10:
+                if (value != proValve){
+                    proValve = value;
+                    proValveValue.setText(Integer.toString(proValve) + "%");
+                }
+                break;
         }
         
     }
     
     public void queueLoop(){
-        int queueFreq = 500;
+        int queueFreq = 250;
         Timeline queueTimeline = new Timeline(
             new KeyFrame(Duration.millis(queueFreq), event -> {
                 checkQueue();
@@ -513,6 +603,7 @@ public class RoasterUI extends Application {
         queueTimeline.setCycleCount(Timeline.INDEFINITE);
         queueTimeline.play();
     }
+    
     
     private void checkQueue(){
         while (arduino.commandQueue.size() != 0){

@@ -3,7 +3,7 @@ Coffee Roaster UI
 Written by Anthony DiPilato
 
 This project is the user interface for the coffee roaster that I built.
-You can see the build log details at [url]
+You can see the build log details at [http://anthonydipilato.com/2016/08/11/coffee-roaster/](http://anthonydipilato.com/2016/08/11/coffee-roaster/)
 
 The UI runs on a Raspberry Pi connected to an arduino via USB
 The arduino acts as slave to the Raspberry Pi
@@ -15,6 +15,7 @@ I will not be held liable for damages and/or injuries resulting from the use of 
 or from reproducing this project.
 
 Commands and Adresses for arduino
+
 Commands
 
 | Code 	| Item 				|

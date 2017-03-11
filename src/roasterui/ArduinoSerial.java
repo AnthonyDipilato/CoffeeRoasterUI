@@ -49,7 +49,8 @@ public class ArduinoSerial{
     void send(int command,int value){
         try {
             serialPort.writeString(command+","+value+"\n");
-            //System.out.println("data sent");
+            // clear message queue to prevent button from bouncing
+            commandQueue.clear();
         } catch (SerialPortException ex) {
             System.out.println("Error sending command: " + ex);
         }
