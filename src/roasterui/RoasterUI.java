@@ -138,19 +138,10 @@ public class RoasterUI extends Application {
     @Override public void init(){
         logData = new ArrayList ();
         timeFormat = new SimpleDateFormat( "mm:ss.S" );
-        // Build Gauges
-        GaugeBuilder builder = GaugeBuilder.create()
-                                           .skinType(Gauge.SkinType.SLIM)
-                                           .barBackgroundColor(MaterialDesign.GREY_800.get())
-                                           .animated(true)
-                                          .animationDuration(750);
-        chamber         = builder.decimals(0).maxValue(700).unit("Chamber").build();
-        exhaust         = builder.decimals(0).maxValue(700).unit("Exhaust").build();
-        drum            = builder.decimals(0).maxValue(700).unit("Drum").build();
-        // Vboxes to build gauges
-        VBox chamberBox        = getVBox("Chamber Temp", MaterialDesign.RED_300.get(), chamber);
-        VBox exhaustBox     = getVBox("Exhaust Temp", MaterialDesign.ORANGE_300.get(), exhaust);
-        VBox drumBox = getVBox("Drum Temp", MaterialDesign.CYAN_300.get(), drum);
+        
+        // Create a pane for gauges
+        HBox gauges = addGauges();
+        
         // Vbox container for Buttons
         VBox btnBox = addBtnBox();
         // Vbox for slider below gauges
@@ -210,25 +201,26 @@ public class RoasterUI extends Application {
         pane.setHgap(10);
         pane.setVgap(15);
         pane.setBackground(new Background(new BackgroundFill(MaterialDesign.GREY_900.get(), CornerRadii.EMPTY, Insets.EMPTY)));
-        // Add Gauges to pane
-        pane.add(drumBox,       0, 0);
-        pane.add(exhaustBox,    1, 0);
-        pane.add(chamberBox,    2, 0);
+        
+        
+        
+        pane.add(gauges,       0, 0);
+        
         // Add Button Box
-        pane.add(btnBox,        4, 0, 1, 2);
+        pane.add(btnBox,        1, 0, 1, 2);
         // Add Slider box to pane
-        pane.add(sliderBox,     0, 1, 3, 1);
+        pane.add(sliderBox,     0, 1, 1, 1);
         // Flame box
-        pane.add(flameBox,     4, 1);
+        pane.add(flameBox,     1, 1);
         
         // Grid lines
         pane.setGridLinesVisible(true);
         
         
         // Add Linechart to pane
-        pane.add(lineChart,     0, 2, 4, 1);
+        pane.add(lineChart,     0, 2, 1, 1);
         // Add Log Buttons
-        pane.add(logBtnBox,     4, 2, 1, 1);
+        pane.add(logBtnBox,     1, 2, 1, 1);
         
 
         
@@ -243,6 +235,31 @@ public class RoasterUI extends Application {
 
     }
     
+    
+    private HBox addGauges(){
+        HBox hbox = new HBox();
+        hbox.setPadding(new Insets(10));
+        hbox.setSpacing(8);
+        // Build Gauges
+        GaugeBuilder builder = GaugeBuilder.create()
+                                           .skinType(Gauge.SkinType.SLIM)
+                                           .barBackgroundColor(MaterialDesign.GREY_800.get())
+                                           .animated(true)
+                                          .animationDuration(750);
+        chamber         = builder.decimals(0).maxValue(700).unit("Chamber").build();
+        exhaust         = builder.decimals(0).maxValue(700).unit("Exhaust").build();
+        drum            = builder.decimals(0).maxValue(700).unit("Drum").build();
+        // Vboxes to build gauges
+        VBox chamberBox        = getVBox("Chamber Temp", MaterialDesign.RED_300.get(), chamber);
+        VBox exhaustBox     = getVBox("Exhaust Temp", MaterialDesign.ORANGE_300.get(), exhaust);
+        VBox drumBox = getVBox("Drum Temp", MaterialDesign.CYAN_300.get(), drum);
+
+        hbox.getChildren().add(chamberBox);
+        hbox.getChildren().add(exhaustBox);
+        hbox.getChildren().add(drumBox);
+        
+        return hbox;
+    }
     
     // Gas Slider Box
     private VBox addSliderBox(){
