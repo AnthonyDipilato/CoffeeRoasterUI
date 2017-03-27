@@ -21,7 +21,7 @@ public class ArduinoSerial{
     public ArrayList commandQueue;
     
     void connect(){
-        portName = "/dev/tty.usbmodemFD121";
+        portName = "/dev/ttyACM0";
         serialPort = new SerialPort(portName);
         try {
             System.out.println("connecting");

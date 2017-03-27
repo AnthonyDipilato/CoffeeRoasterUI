@@ -9,7 +9,7 @@ and open the template in the editor.
 */
 
 .slider{
-    -fx-pref-width:         750;
+    -fx-pref-width:         600;
     -fx-show-tick-labels:   true;
     -fx-show-tick-marks:    true;
     -fx-major-tick-unit:    25;
@@ -45,7 +45,7 @@ and open the template in the editor.
 }
 
 .tBtn {
-    -fx-pref-width: 150px;
+    -fx-pref-width: 125px;
     -fx-background-color: #565b5e;
     -fx-background-radius: 5,4,3,5;
     -fx-background-insets: 0,1,2,0;
@@ -53,8 +53,8 @@ and open the template in the editor.
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
     -fx-font-family: "Arial";
     -fx-text-fill: linear-gradient(white, #d0d0d0);
-    -fx-font-size: 14px;
-    -fx-padding: 10 20 10 20;
+    -fx-font-size: 12px;
+    -fx-padding: 5 10 5 10;
 }
 
 .tBtn:selected {
@@ -86,6 +86,8 @@ and open the template in the editor.
 
 .chart {
     -fx-padding: 10px;
+    -fx-pref-height: 400px;
+    -fx-min-height: 400px;
 }
 .chart-content {
     -fx-padding: 30px;
@@ -159,29 +161,29 @@ and open the template in the editor.
 }
 
 .flameOn {
-    -fx-pref-width: 150px;
+    -fx-pref-width: 125px;
     -fx-background-color: #565b5e;
     -fx-background-radius: 5,4,3,5;
     -fx-background-insets: 0,1,2,0;
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
     -fx-font-family: "Arial";
     -fx-text-fill: linear-gradient(white, #d0d0d0);
-    -fx-font-size: 16px;
-    -fx-padding: 10 20 10 20;
+    -fx-font-size: 12px;
+    -fx-padding: 5 10 5 10;
     -fx-text-fill: #5aba5d;
     -fx-font-weight: bold;
 }
 
 .flameOff {
-    -fx-pref-width: 150px;
+    -fx-pref-width: 125px;
     -fx-background-color: #565b5e;
     -fx-background-radius: 5,4,3,5;
     -fx-background-insets: 0,1,2,0;
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
     -fx-font-family: "Arial";
     -fx-text-fill: linear-gradient(white, #d0d0d0);
-    -fx-font-size: 16px;
-    -fx-padding: 10 20 10 20;
+    -fx-font-size: 12px;
+    -fx-padding: 5 10 5 10;
     -fx-text-fill: #e57373;
     -fx-font-weight: bold;
 }

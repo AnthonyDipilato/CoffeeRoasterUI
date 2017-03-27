@@ -54,6 +54,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
@@ -73,6 +74,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -189,7 +191,20 @@ public class RoasterUI extends Application {
         // Add Chart Series
         lineChart.getData().addAll(drumSeries, chamberSeries, exhaustSeries);
         lineChart.getStyleClass().add("chart");
-        // Assemble Grid
+        
+        
+        //  Flame Status
+        VBox flameBox = new VBox();
+        flameBox.setPadding(new Insets(20));
+        flameBox.setSpacing(20);
+        Label flameLabel = new Label("Flame Status");
+        flameBtn = new Button("OFF");
+        flameLabel.getStyleClass().add("flameLabel");
+        flameBtn.getStyleClass().add("flameOff");
+        flameBox.getChildren().add(flameLabel);
+        flameBox.getChildren().add(flameBtn);
+        
+        
         pane = new GridPane();
         pane.setPadding(new Insets(20));
         pane.setHgap(10);
@@ -200,15 +215,25 @@ public class RoasterUI extends Application {
         pane.add(exhaustBox,    1, 0);
         pane.add(chamberBox,    2, 0);
         // Add Button Box
-        pane.add(btnBox,        3, 0);
+        pane.add(btnBox,        4, 0, 1, 2);
         // Add Slider box to pane
-        pane.add(sliderBox,     0, 1, 4, 1);
-        // Add Linechart to pane
-        pane.add(lineChart, 0, 2, 3, 1);
-        // Add Log Buttons
-        pane.add(logBtnBox, 3,2);
+        pane.add(sliderBox,     0, 1, 3, 1);
+        // Flame box
+        pane.add(flameBox,     4, 1);
+        
         // Grid lines
-        pane.setGridLinesVisible(false);
+        pane.setGridLinesVisible(true);
+        
+        
+        // Add Linechart to pane
+        pane.add(lineChart,     0, 2, 4, 1);
+        // Add Log Buttons
+        pane.add(logBtnBox,     4, 2, 1, 1);
+        
+
+        
+        
+        
         // Anchor Pane to center Items
         anchorPane = new GridPane();
         anchorPane.setPadding(new Insets(20));
@@ -217,6 +242,7 @@ public class RoasterUI extends Application {
         anchorPane.setAlignment(Pos.CENTER);
 
     }
+    
     
     // Gas Slider Box
     private VBox addSliderBox(){
@@ -236,6 +262,8 @@ public class RoasterUI extends Application {
         proValveValue = new Button(Integer.toString(proValve) + "%");
         proValveValue.getStyleClass().add("proValve");
         proValveValue.setTextAlignment(TextAlignment.RIGHT);
+        
+        
         
         hbox.getChildren().add(gasSlider);
         hbox.getChildren().add(setBtn);
@@ -261,14 +289,13 @@ public class RoasterUI extends Application {
         return vbox;
     }
     
+    
     // Logging Buttons
     private VBox logBtnBox(){
         VBox vbox = new VBox();
         vbox.setPadding(new Insets(20));
         vbox.setSpacing(20);
-        // Clock Display
-        clockDisplay = new Label("00:00.00");
-        Font.loadFont(getClass().getResourceAsStream("/resources/fonts/liquid_crystal/LiquidCrystal-Normal.otf"), 24);
+        
         // Buttons
         ToggleButton logBtn = new ToggleButton("Logging");
         Button firstBtn = new Button("First Crack");
@@ -277,8 +304,7 @@ public class RoasterUI extends Application {
         Button saveBtn = new Button("Save Log");
         Button resetBtn = new Button("Reset");
         Button quitBtn = new Button("Exit");
-        // CSS Styles for buttons
-        clockDisplay.getStyleClass().add("clock");
+        
         logBtn.getStyleClass().add("tBtn");
         firstBtn.getStyleClass().add("tBtn");
         secondBtn.getStyleClass().add("tBtn");
@@ -286,6 +312,11 @@ public class RoasterUI extends Application {
         saveBtn.getStyleClass().add("tBtn");
         resetBtn.getStyleClass().add("tBtn");
         quitBtn.getStyleClass().add("tBtn");
+        
+        // Timer
+        clockDisplay = new Label("00:00.00");
+        Font.loadFont(getClass().getResourceAsStream("/resources/fonts/liquid_crystal/LiquidCrystal-Normal.otf"), 24);
+        clockDisplay.getStyleClass().add("clock");
         
         // Listeners for buttons
         logBtn.setOnAction(new EventHandler<ActionEvent>() {
@@ -318,7 +349,6 @@ public class RoasterUI extends Application {
             }
         });
         
-        // Add buttons to vbox
         vbox.getChildren().add(clockDisplay);
         vbox.getChildren().add(logBtn);
         vbox.getChildren().add(resetBtn);
@@ -346,17 +376,14 @@ public class RoasterUI extends Application {
         drumBtn = new ToggleButton("Drum");
         exhaustBtn = new ToggleButton("Exhaust Fan");
         coolingBtn = new ToggleButton("Cooling Fan");
-        //  Flame Status
-        Label flameLabel = new Label("Flame Status");
-        flameBtn = new Button("OFF");
+        
         // Add CSS styles
         ignitorBtn.getStyleClass().add("tBtn");
         gasBtn.getStyleClass().add("tBtn");
         drumBtn.getStyleClass().add("tBtn");
         exhaustBtn.getStyleClass().add("tBtn");
         coolingBtn.getStyleClass().add("tBtn");
-        flameLabel.getStyleClass().add("flameLabel");
-        flameBtn.getStyleClass().add("flameOff");
+        
         //Button Actions
         ignitorBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -395,8 +422,7 @@ public class RoasterUI extends Application {
         vbox.getChildren().add(drumBtn);
         vbox.getChildren().add(exhaustBtn);
         vbox.getChildren().add(coolingBtn);
-        vbox.getChildren().add(flameLabel);
-        vbox.getChildren().add(flameBtn);
+        
 
         return vbox;
     }
@@ -457,11 +483,18 @@ public class RoasterUI extends Application {
     
     @Override
     public void start(Stage stage) {
+        Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
+        
         Scene scene = new Scene(anchorPane);
         scene.getStylesheets().add("resources/RoasterUIStyle.css"); 
         
         stage.setTitle("Coffee Roaster v3.0");
         stage.setScene(scene);
+        
+        stage.setX(primaryScreenBounds.getMinX()-100);
+        stage.setY(primaryScreenBounds.getMinY()-100);
+        stage.setWidth(primaryScreenBounds.getWidth()+100);
+        stage.setHeight(primaryScreenBounds.getHeight()+100);
         stage.setFullScreen(true);
         stage.show();
 
@@ -505,18 +538,22 @@ public class RoasterUI extends Application {
         value = Integer.parseInt(parts[2]);
         
         switch (address) {
+            // Drum Temp
             case 1:
                 drumTemp = value;
                 drum.setValue(drumTemp);
                 break;
+            // Chamber Temp
             case 2:
                 chamberTemp = value;
                 chamber.setValue(chamberTemp);
                 break;
+            // Exhaust Temp
             case 3:
                 exhaustTemp = value;
                 exhaust.setValue(exhaustTemp);
                 break;
+            // Flame Status
             case 4:
                 if(flameStatus && value == 0){
                     flameStatus = false;
@@ -531,6 +568,7 @@ public class RoasterUI extends Application {
                     flameBtn.getStyleClass().add("flameOn");
                 }
                 break;
+            // Drum Motor
             case 5:
                 if(drumStatus && value == 0){
                     drumStatus = false;
@@ -541,6 +579,7 @@ public class RoasterUI extends Application {
                     drumBtn.setSelected(true);
                 }
                 break;
+            // Cooling Fan
             case 6:
                 if(coolingStatus && value == 0){
                     coolingStatus = false;
@@ -551,6 +590,7 @@ public class RoasterUI extends Application {
                     coolingBtn.setSelected(true);
                 }
                 break;
+            // Exhaust Fan
             case 7:
                 if(exhaustStatus && value == 0){
                     exhaustStatus = false;
@@ -561,6 +601,7 @@ public class RoasterUI extends Application {
                     exhaustBtn.setSelected(true);
                 }
                 break;
+            // Gas Valve
             case 8:
                 if(gasStatus && value == 0){
                     gasStatus = false;
@@ -571,9 +612,8 @@ public class RoasterUI extends Application {
                     gasBtn.setSelected(true);
                 }
                 break;
+            // Ignitor Status
             case 9:
-                System.out.println("Ignitor: "+value);
-                System.out.println("Ignitor Current: "+ignitorStatus);
                 if(ignitorStatus && value == 0){
                     ignitorStatus = false;
                     ignitorBtn.setSelected(false);
@@ -583,6 +623,7 @@ public class RoasterUI extends Application {
                     ignitorBtn.setSelected(true);
                 }
                 break;
+            // Proportional Valve
             case 10:
                 if (value != proValve){
                     proValve = value;
