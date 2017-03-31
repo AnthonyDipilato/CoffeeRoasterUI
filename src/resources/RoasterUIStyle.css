@@ -88,67 +88,12 @@ and open the template in the editor.
     -fx-text-fill: #999999;
 }
 
-.chart {
-    -fx-padding: 10px;
-    -fx-pref-height: 400px;
-    -fx-min-height: 400px;
-}
-.chart-content {
-    -fx-padding: 30px;
-}
-.chart-legend {
-   -fx-padding: 20px;
-   -fx-background-color:  #565b5e;
-}
- 
-.chart-legend-item-symbol{
-}
- 
-.chart-legend-item{
-    -fx-text-fill: white;
-}
-
-.chart-title {
-  -fx-text-fill: #c7c7c7;
-}
- 
-.axis-label {
-  -fx-text-fill: #c7c7c7;
-}
-
-.chart-plot-background {
-    -fx-background-color: #3b3e3f;
-}
-.chart-vertical-grid-lines {
-    -fx-stroke: #222425;
-}
-.chart-horizontal-grid-lines {
-    -fx-stroke: #222425;
-}
-.chart-alternative-row-fill {
-    -fx-fill: #4e5254;
-    -fx-stroke: transparent;
-    -fx-stroke-width: 0;
-}
-
-.default-color0.chart-series-line { -fx-stroke: #44939e; }
-.default-color1.chart-series-line { -fx-stroke: #ffb74d; }
-.default-color2.chart-series-line { -fx-stroke: #e57373; }
- 
-.default-color0.chart-line-symbol { -fx-background-color: #44939e, black; }
-.default-color1.chart-line-symbol { -fx-background-color: #ffb74d, black; }
-.default-color2.chart-line-symbol { -fx-background-color: #e57373, black; }
 
 .slider-label {
   -fx-text-fill: #c7c7c7;
 }
 
 
-.clock {
-    -fx-font-size: 32;
-    -fx-text-fill: #c7c7c7;
-    -fx-font-family: "Liquid Crystal";
-}
 .proValve {
     -fx-pref-width: 150;
     -fx-font-size: 12;
