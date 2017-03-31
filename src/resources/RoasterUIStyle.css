@@ -9,7 +9,7 @@ and open the template in the editor.
 */
 
 .slider{
-    -fx-pref-width:         600;
+    -fx-pref-width:         400;
     -fx-show-tick-labels:   true;
     -fx-show-tick-marks:    true;
     -fx-major-tick-unit:    25;
@@ -45,7 +45,7 @@ and open the template in the editor.
 }
 
 .tBtn {
-    -fx-pref-width: 125px;
+    -fx-pref-width: 150px;
     -fx-background-color: #565b5e;
     -fx-background-radius: 5,4,3,5;
     -fx-background-insets: 0,1,2,0;
@@ -53,8 +53,12 @@ and open the template in the editor.
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
     -fx-font-family: "Arial";
     -fx-text-fill: linear-gradient(white, #d0d0d0);
-    -fx-font-size: 12px;
+    -fx-font-size: 14px;
     -fx-padding: 5 10 5 10;
+}
+
+.gaugeBox {
+    -fx-pref-width: 300px;
 }
 
 .tBtn:selected {
@@ -75,7 +79,7 @@ and open the template in the editor.
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
     -fx-font-family: "Arial";
     -fx-text-fill: linear-gradient(white, #d0d0d0);
-    -fx-font-size: 14px;
+    -fx-font-size: 12px;
     -fx-padding: 10 20 10 20;
 }
 
@@ -141,18 +145,19 @@ and open the template in the editor.
 
 
 .clock {
-    -fx-font-size: 36;
+    -fx-font-size: 32;
     -fx-text-fill: #c7c7c7;
     -fx-font-family: "Liquid Crystal";
 }
 .proValve {
-    -fx-font-size: 30;
-    -fx-text-fill: #c7c7c7;
+    -fx-pref-width: 150;
+    -fx-font-size: 12;
+    -fx-text-fill: white;
     -fx-font-family: "Liquid Crystal";
-    -fx-pref-width: 124px;
-    -fx-background-color: transparent;
+    -fx-background-color: #565b5e;
+    -fx-background-radius: 5,4,3,5;
     -fx-background-insets: 0,1,2,0;
-    -fx-padding: 0 10 10 20;
+    -fx-padding: 5 10 5 10;
     -fx-font-weight: bold;
 }
 
@@ -161,7 +166,7 @@ and open the template in the editor.
 }
 
 .flameOn {
-    -fx-pref-width: 125px;
+    -fx-pref-width: 150;
     -fx-background-color: #565b5e;
     -fx-background-radius: 5,4,3,5;
     -fx-background-insets: 0,1,2,0;
@@ -175,7 +180,7 @@ and open the template in the editor.
 }
 
 .flameOff {
-    -fx-pref-width: 125px;
+    -fx-pref-width: 150;
     -fx-background-color: #565b5e;
     -fx-background-radius: 5,4,3,5;
     -fx-background-insets: 0,1,2,0;

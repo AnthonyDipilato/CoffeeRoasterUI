@@ -91,32 +91,15 @@ public class RoasterUI extends Application {
     // Panes
     private         GridPane pane;
     private         GridPane anchorPane;
-    // Chart
-    private         LineChart lineChart;
-    private         CategoryAxis xAxis;
-    private         NumberAxis yAxis;
-    private         XYChart.Series drumSeries;
-    private         XYChart.Series exhaustSeries;
-    private         XYChart.Series chamberSeries;
-    private         int seriesPoint;
-    // Timer
-    private         Label clockDisplay;
-    private         DateFormat timeFormat;
     // Slider Label
     private         Button proValveValue;
-    // Timer
-    private         Timeline timer;
-    private         long timerStart = 0;
-    private         long timerCurrent;
-    private         long timerResumed = 0;
-    private         boolean timerStatus;
-    private         long lastLog = 0;
     // Control Buttons
     private         ToggleButton ignitorBtn;
     private         ToggleButton gasBtn;
     private         ToggleButton drumBtn;
     private         ToggleButton exhaustBtn;
     private         ToggleButton coolingBtn;
+    // Flame Status
     private         Button flameBtn;
     // Status Variables
     private         boolean ignitorStatus = false;
@@ -136,99 +119,28 @@ public class RoasterUI extends Application {
     private ArduinoSerial arduino;
     
     @Override public void init(){
-        logData = new ArrayList ();
-        timeFormat = new SimpleDateFormat( "mm:ss.S" );
-        
         // Create a pane for gauges
         HBox gauges = addGauges();
-        
+        gauges.getStyleClass().add("gaugeBox");
         // Vbox container for Buttons
         VBox btnBox = addBtnBox();
         // Vbox for slider below gauges
         VBox sliderBox = addSliderBox();
-        // Log Button Box
-        VBox logBtnBox = logBtnBox();
-
-        
-        // Setup Chart
-        xAxis = new CategoryAxis();
-        yAxis = new NumberAxis();
-        xAxis.setLabel("Time");
-        yAxis.setLabel("Temperature");
-        // Set Y axis range so it doesn't bounce as new data is added
-        yAxis.setAutoRanging(false);
-        yAxis.setLowerBound(0);
-        yAxis.setUpperBound(750);
-        yAxis.setTickUnit(100);
-        
-        //create the chart
-        lineChart = new LineChart(xAxis,yAxis);
-        lineChart.setAnimated(false);
-        seriesPoint = 0;
-        
-        // Set up data series for chart temps
-        drumSeries = new XYChart.Series();
-        exhaustSeries = new XYChart.Series();
-        chamberSeries = new XYChart.Series();
-        // Series display names
-        drumSeries.setName("Drum");
-        chamberSeries.setName("Exhaust");
-        exhaustSeries.setName("Chamber");
-        // Initial data for series
-        drumSeries.getData().add(new XYChart.Data("00:00", 0));
-        chamberSeries.getData().add(new XYChart.Data("00:00", 0));
-        exhaustSeries.getData().add(new XYChart.Data("00:00", 0)); 
-        
-        // Add Chart Series
-        lineChart.getData().addAll(drumSeries, chamberSeries, exhaustSeries);
-        lineChart.getStyleClass().add("chart");
-        
-        
-        //  Flame Status
-        VBox flameBox = new VBox();
-        flameBox.setPadding(new Insets(20));
-        flameBox.setSpacing(20);
-        Label flameLabel = new Label("Flame Status");
-        flameBtn = new Button("OFF");
-        flameLabel.getStyleClass().add("flameLabel");
-        flameBtn.getStyleClass().add("flameOff");
-        flameBox.getChildren().add(flameLabel);
-        flameBox.getChildren().add(flameBtn);
-        
-        
+        // Build Grid
         pane = new GridPane();
-        pane.setPadding(new Insets(20));
+        pane.setPadding(new Insets(10));
         pane.setHgap(10);
         pane.setVgap(15);
         pane.setBackground(new Background(new BackgroundFill(MaterialDesign.GREY_900.get(), CornerRadii.EMPTY, Insets.EMPTY)));
-        
-        
-        
+        // Add Gauges
         pane.add(gauges,       0, 0);
-        
         // Add Button Box
         pane.add(btnBox,        1, 0, 1, 2);
         // Add Slider box to pane
         pane.add(sliderBox,     0, 1, 1, 1);
-        // Flame box
-        pane.add(flameBox,     1, 1);
-        
-        // Grid lines
-        pane.setGridLinesVisible(true);
-        
-        
-        // Add Linechart to pane
-        pane.add(lineChart,     0, 2, 1, 1);
-        // Add Log Buttons
-        pane.add(logBtnBox,     1, 2, 1, 1);
-        
-
-        
-        
-        
         // Anchor Pane to center Items
         anchorPane = new GridPane();
-        anchorPane.setPadding(new Insets(20));
+        anchorPane.setPadding(new Insets(5));
         anchorPane.add(pane,0,0);
         anchorPane.setBackground(new Background(new BackgroundFill(MaterialDesign.GREY_900.get(), CornerRadii.EMPTY, Insets.EMPTY)));
         anchorPane.setAlignment(Pos.CENTER);
@@ -253,11 +165,10 @@ public class RoasterUI extends Application {
         VBox chamberBox        = getVBox("Chamber Temp", MaterialDesign.RED_300.get(), chamber);
         VBox exhaustBox     = getVBox("Exhaust Temp", MaterialDesign.ORANGE_300.get(), exhaust);
         VBox drumBox = getVBox("Drum Temp", MaterialDesign.CYAN_300.get(), drum);
-
+        // Add items to hbox
         hbox.getChildren().add(chamberBox);
         hbox.getChildren().add(exhaustBox);
         hbox.getChildren().add(drumBox);
-        
         return hbox;
     }
     
@@ -275,18 +186,10 @@ public class RoasterUI extends Application {
         // Set Button
         Button setBtn = new Button("Set");
         setBtn.getStyleClass().add("setBtn");
-        // Provalve value
-        proValveValue = new Button(Integer.toString(proValve) + "%");
-        proValveValue.getStyleClass().add("proValve");
-        proValveValue.setTextAlignment(TextAlignment.RIGHT);
-        
-        
-        
+        // Add items to box
         hbox.getChildren().add(gasSlider);
         hbox.getChildren().add(setBtn);
-        hbox.getChildren().add(proValveValue);
-        
-        // Set listener
+        // Set listener for button
         setBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -307,100 +210,47 @@ public class RoasterUI extends Application {
     }
     
     
-    // Logging Buttons
-    private VBox logBtnBox(){
-        VBox vbox = new VBox();
-        vbox.setPadding(new Insets(20));
-        vbox.setSpacing(20);
-        
-        // Buttons
-        ToggleButton logBtn = new ToggleButton("Logging");
-        Button firstBtn = new Button("First Crack");
-        Button secondBtn = new Button("Second Crack");
-        Button dumpBtn = new Button("Dump");
-        Button saveBtn = new Button("Save Log");
-        Button resetBtn = new Button("Reset");
-        Button quitBtn = new Button("Exit");
-        
-        logBtn.getStyleClass().add("tBtn");
-        firstBtn.getStyleClass().add("tBtn");
-        secondBtn.getStyleClass().add("tBtn");
-        dumpBtn.getStyleClass().add("tBtn");
-        saveBtn.getStyleClass().add("tBtn");
-        resetBtn.getStyleClass().add("tBtn");
-        quitBtn.getStyleClass().add("tBtn");
-        
-        // Timer
-        clockDisplay = new Label("00:00.00");
-        Font.loadFont(getClass().getResourceAsStream("/resources/fonts/liquid_crystal/LiquidCrystal-Normal.otf"), 24);
-        clockDisplay.getStyleClass().add("clock");
-        
-        // Listeners for buttons
-        logBtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                toggleTimer();
-            }
-        });
-        resetBtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                timerStart = System.currentTimeMillis();
-                timerResumed = 0;
-                clockDisplay.setText( timeFormat.format(0) );
-                logData.clear();
-            }
-        });
-        
-        saveBtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                saveLog();
-            }
-        });
-        
-        quitBtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                stop();
-            }
-        });
-        
-        vbox.getChildren().add(clockDisplay);
-        vbox.getChildren().add(logBtn);
-        vbox.getChildren().add(resetBtn);
-        vbox.getChildren().add(firstBtn);
-        vbox.getChildren().add(secondBtn);
-        vbox.getChildren().add(dumpBtn);
-        vbox.getChildren().add(saveBtn);
-        vbox.getChildren().add(quitBtn);
-        
-        
-        return vbox;
-    }
-    
-    
-    
     // Toggle Button Box
     private VBox addBtnBox(){
         VBox vbox = new VBox();
         vbox.setPadding(new Insets(20));
         vbox.setSpacing(20);
-        
+        // Flame status
+        VBox flameBox = new VBox();
+        flameBox.setPadding(new Insets(0));
+        flameBox.setSpacing(5);
+        Label flameLabel = new Label("Flame Status");
+        flameBtn = new Button("OFF");
+        flameLabel.getStyleClass().add("flameLabel");
+        flameBtn.getStyleClass().add("flameOff");
+        flameBox.getChildren().add(flameLabel);
+        flameBox.getChildren().add(flameBtn);
+        // Valve Status
+        VBox valveBox = new VBox();
+        valveBox.setPadding(new Insets(0));
+        valveBox.setSpacing(5);
+        Label valveLabel = new Label("Valve Status");
+        // Provalve value
+        proValveValue = new Button(Integer.toString(proValve) + "%");
+        proValveValue.getStyleClass().add("proValve");
+        proValveValue.setTextAlignment(TextAlignment.RIGHT);
+        valveLabel.getStyleClass().add("flameLabel");
+        valveBox.getChildren().add(valveLabel);
+        valveBox.getChildren().add(proValveValue);
         // Initialize toggle Buttons
         ignitorBtn = new ToggleButton("Ignitor");
         gasBtn = new ToggleButton("Gas Valve");
         drumBtn = new ToggleButton("Drum");
         exhaustBtn = new ToggleButton("Exhaust Fan");
         coolingBtn = new ToggleButton("Cooling Fan");
-        
+        Button quitBtn = new Button("Exit");
         // Add CSS styles
         ignitorBtn.getStyleClass().add("tBtn");
         gasBtn.getStyleClass().add("tBtn");
         drumBtn.getStyleClass().add("tBtn");
         exhaustBtn.getStyleClass().add("tBtn");
         coolingBtn.getStyleClass().add("tBtn");
-        
+        quitBtn.getStyleClass().add("tBtn");
         //Button Actions
         ignitorBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -432,14 +282,21 @@ public class RoasterUI extends Application {
                 setItem("cooling");
             }
         });
-        
+        quitBtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                stop();
+            }
+        });
         // Add buttons to vbox
         vbox.getChildren().add(ignitorBtn);
         vbox.getChildren().add(gasBtn);
         vbox.getChildren().add(drumBtn);
         vbox.getChildren().add(exhaustBtn);
         vbox.getChildren().add(coolingBtn);
-        
+        vbox.getChildren().add(flameBox);
+        vbox.getChildren().add(valveBox);
+        vbox.getChildren().add(quitBtn);
 
         return vbox;
     }
@@ -479,19 +336,17 @@ public class RoasterUI extends Application {
         arduino.send(command, address);
     }
     
+    // Box build for gauges
     private VBox getVBox(final String TEXT, final Color COLOR, final Gauge GAUGE) {
-        Rectangle bar = new Rectangle(200, 3);
+        Rectangle bar = new Rectangle(150, 3);
         bar.setArcWidth(6);
         bar.setArcHeight(6);
         bar.setFill(COLOR);
-
         Label label = new Label(TEXT);
         label.setTextFill(COLOR);
         label.setAlignment(Pos.CENTER);
         label.setPadding(new Insets(0, 0, 10, 0));
-
         GAUGE.setBarColor(COLOR);
-
         VBox vBox = new VBox(bar, label, GAUGE);
         vBox.setSpacing(3);
         vBox.setAlignment(Pos.CENTER);
@@ -501,29 +356,21 @@ public class RoasterUI extends Application {
     @Override
     public void start(Stage stage) {
         Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
-        
         Scene scene = new Scene(anchorPane);
         scene.getStylesheets().add("resources/RoasterUIStyle.css"); 
-        
         stage.setTitle("Coffee Roaster v3.0");
         stage.setScene(scene);
-        
-        stage.setX(primaryScreenBounds.getMinX()-100);
-        stage.setY(primaryScreenBounds.getMinY()-100);
-        stage.setWidth(primaryScreenBounds.getWidth()+100);
-        stage.setHeight(primaryScreenBounds.getHeight()+100);
+        stage.setX(primaryScreenBounds.getMinX());
+        stage.setY(primaryScreenBounds.getMinY());
+        stage.setWidth(primaryScreenBounds.getWidth());
+        stage.setHeight(primaryScreenBounds.getHeight());
         stage.setFullScreen(true);
         stage.show();
-
-        // Timer display loop
-        timerSetup();
         // Loop for sending status commands to arduino
         statusLoop();
         // Loop for checking responses from arduino
         queueLoop();
     }
-    
-
     
     private void statusLoop(){
         arduino = new ArduinoSerial();
@@ -536,8 +383,6 @@ public class RoasterUI extends Application {
         );
         statusTimer.setCycleCount(Timeline.INDEFINITE);
         statusTimer.play();
-        
-        
     }
     
     
@@ -662,95 +507,10 @@ public class RoasterUI extends Application {
         queueTimeline.play();
     }
     
-    
     private void checkQueue(){
         while (arduino.commandQueue.size() != 0){
             String response = arduino.checkQueue();
             processResponse(response);
-        }
-    }
-    
-    private void timerSetup() {
-        int logFreq = 1000;
-        timer = new Timeline(
-            new KeyFrame(Duration.millis(10), event -> {
-                // update timer
-                timerCurrent = System.currentTimeMillis() - timerStart + timerResumed;
-                clockDisplay.setText( timeFormat.format(timerCurrent) );
-                if (System.currentTimeMillis() - lastLog > logFreq) {
-                    logTemps();
-                    lastLog = System.currentTimeMillis();
-                }
-            })
-        );
-        timer.setCycleCount(Timeline.INDEFINITE);
-        //timer.play();
-        timerStatus = false;
-    }
-    
-    private void logTemps(){
-        Log logItem = new Log();
-        logItem.timestamp = timerCurrent;
-        
-        String xValue = String.format("%02d:%02d", 
-        TimeUnit.MILLISECONDS.toMinutes(timerCurrent) -  
-        TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(timerCurrent)), // The change is in this line
-        TimeUnit.MILLISECONDS.toSeconds(timerCurrent) - 
-        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(timerCurrent)));  
-        
-        logItem.chamberTemp = chamberTemp;
-        chamberSeries.getData().add(new XYChart.Data(xValue, logItem.chamberTemp));
-        
-        logItem.exhaustTemp = exhaustTemp;
-        exhaustSeries.getData().add(new XYChart.Data(xValue, logItem.exhaustTemp));
-
-        logItem.drumTemp = drumTemp;
-        drumSeries.getData().add(new XYChart.Data(xValue, logItem.drumTemp));
-        
-        logItem.ignitorStatus = ignitorStatus;
-        logItem.gasStatus = gasStatus;
-        logItem.exhaustStatus = exhaustStatus;
-        logItem.coolingStatus = coolingStatus;
-        logItem.proValve = proValve;
-        logData.add(logItem);
-
-        seriesPoint++;
-        if(seriesPoint > 15){
-            chamberSeries.getData().remove(0);
-            exhaustSeries.getData().remove(0);
-            drumSeries.getData().remove(0);
-            // update
-            //xAxis.setAutoRanging(false);
-            //xAxis.setLowerBound(seriesPoint - 11);
-            //xAxis.setUpperBound(seriesPoint);
-        }
-    }
-    
-    private void toggleTimer(){
-        if (!timerStatus) {
-                timerStart = System.currentTimeMillis();
-                timer.play();
-                timerStatus = true;
-            }else{
-                timer.stop();
-                timerResumed = timerCurrent;
-                timerStatus = false;
-            }  
-    }
-    
-    private void saveLog(){
-        String output = "Timestamp, Drum Temp, Chamber Temp, Exhaust Temp, Provalve \n";
-        for (Log item : logData) {
-            output += item.timestamp+", "+item.drumTemp+", "+item.chamberTemp+", "+item.exhaustTemp+", "+item.proValve+" \n";
-        }
-        DateFormat dateFormat = new SimpleDateFormat( "yyyy-MM-dd-HH-mm" );
-        String filename = "/Development/Roast-" + dateFormat.format(System.currentTimeMillis()) + ".csv";
-        try{
-            PrintWriter writer = new PrintWriter(filename, "UTF-8");
-            writer.print(output);
-            writer.close();
-        } catch (IOException e) {
-           // do something
         }
     }
     
