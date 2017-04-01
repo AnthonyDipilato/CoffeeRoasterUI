@@ -21,7 +21,7 @@ public class ArduinoSerial{
     public ArrayList commandQueue;
     
     void connect(){
-        portName = "/dev/ttyACM0";
+        portName = "/dev/rfcomm0"; // Bluetooth port
         serialPort = new SerialPort(portName);
         try {
             System.out.println("connecting");
