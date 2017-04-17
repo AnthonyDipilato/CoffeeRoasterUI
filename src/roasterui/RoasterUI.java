@@ -402,16 +402,25 @@ public class RoasterUI extends Application {
         switch (address) {
             // Drum Temp
             case 1:
+                if(value == 0){
+                    break;
+                }
                 drumTemp = value;
                 drum.setValue(drumTemp);
                 break;
             // Chamber Temp
             case 2:
+                if(value == 0){
+                    break;
+                }
                 chamberTemp = value;
                 chamber.setValue(chamberTemp);
                 break;
             // Exhaust Temp
             case 3:
+                if(value == 0){
+                    break;
+                }
                 exhaustTemp = value;
                 exhaust.setValue(exhaustTemp);
                 break;
