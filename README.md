@@ -51,3 +51,6 @@ Addresses
 
 ### Author
 Anthony DiPilato, Anthony@bumbol.com
+
+### License
+All code is available under the MIT license. See LICENSE file for info.
