@@ -46,7 +46,7 @@ Addresses
 
 ### Required Libraries
 - [Medusa](https://github.com/HanSolo/Medusa) - JavaFX library for animated gauges
-- [jSSC 2.7.0] - Java Simple Serial Connector, serial-port communication library.
+- [jSSC 2.7.0](https://code.google.com/archive/p/java-simple-serial-connector/) - Java Simple Serial Connector, serial-port communication library.
 - [Colors 1.4](https://github.com/HanSolo/Colors) - Color definitions for Medusa
 
 ### Author
