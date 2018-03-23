@@ -2,7 +2,7 @@
 ![Coffee Roaster UI](http://anthonydipilato.com/wp-content/uploads/2018/03/roasterui.png)
 
 This project is the user interface for the coffee roaster that I built.
-You can see the build log details at [http://anthonydipilato.com/2016/08/11/coffee-roaster/](http://anthonydipilato.com/2016/08/11/coffee-roaster/)
+You can see the build log details at [http://anthonydipilato.com/2017/04/17/coffee-roaster-ui-with-javafx/](http://anthonydipilato.com/2017/04/17/coffee-roaster-ui-with-javafx/)
 
 The UI runs on a Raspberry Pi connected to an arduino via USB
 The arduino acts as slave to the Raspberry Pi
